@@ -20,7 +20,17 @@
     ```
     sudo apt-get install nvidia-docker2
     ```
-
+  ※설치가 안된다면?
+  아래 명령어 실행
+    
+    ```
+    sudo apt-get update
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+                 && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+                 && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+    sudo apt-get update
+    sudo apt-get install nvidia-docker2
+    ```
 - 이미지 빌드
   
   ```bash
