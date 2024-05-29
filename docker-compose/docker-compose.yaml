@@ -1,0 +1,18 @@
+services:
+  talker:
+    build:
+      context: ./ # 도커파일 폴더
+      dockerfile: humble-jammy.dockerfile
+    image: ioes-humble:latest
+    command: /bin/bash
+    tty: true
+
+  listener:
+    build:
+      context: ./ # 도커파일 폴더
+      dockerfile: jazzy-noble.dockerfile
+    image: ioes-jazzy:latest
+    environment:
+      - "PYTHONUNBUFFERED=1"
+    command: /bin/bash
+    tty: true
