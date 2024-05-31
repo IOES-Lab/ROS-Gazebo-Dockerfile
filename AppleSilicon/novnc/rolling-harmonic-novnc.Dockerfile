@@ -101,6 +101,6 @@ EXPOSE 5901
 EXPOSE 6080
 CMD bash -c "vncserver -localhost no -SecurityTypes None -geometry 1920x1080 --I-KNOW-THIS-IS-INSECURE && openssl req -new -subj "/C=KR" -x509 -days 365 -nodes -out self.pem -keyout self.pem && websockify -D --web=/usr/share/novnc/ --cert=self.pem 6080 localhost:5901 && tail -f /dev/null"
 
-# docker build -f novnc.dockerfile -t novnc .
-# docker run -it -p 6080:6080 novnc
+# docker build -f rolling-harmonic-novnc.Dockerfile -t rolling-harmonic-novnc .
+# docker run -it -p 6080:6080 v
 # http://localhost:6080/vnc.html
