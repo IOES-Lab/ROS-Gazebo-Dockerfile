@@ -1,4 +1,4 @@
-# Dockerfile for ROS Rolling and Gazebo Garden
+# Dockerfile for ROS-Gaszebo Framework
 
 ## 자동 스크립트 사용 빌드 & 실행
 

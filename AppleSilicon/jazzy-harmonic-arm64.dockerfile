@@ -96,9 +96,9 @@ RUN echo "" >> ~/.bashrc && \
     echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 
 # Set-up Gazebo Environment as default
-RUN echo "" >> ~/.bashrc && \
-    echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
-    echo "source /gazebo/install/setup.bash" >> ~/.bashrc
+# RUN echo "" >> ~/.bashrc && \
+#     echo "# Automatic set-up of the Gazebo in /gazebo" >> ~/.bashrc && \
+#     echo "source /gazebo/install/setup.bash" >> ~/.bashrc
 
 # To Build
 # docker build -t jazzy-harmonic -f jazzy-harmonic-arm64.dockerfile .
