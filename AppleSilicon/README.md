@@ -1,5 +1,15 @@
 # Dockerfiles for M1 Macbook
 
+## Recommended : Running ARM64 Ubuntu with Docker and connect with remote desktop
+- remote-desktop : run and access using remote desktop client
+
+  ```bash
+  docker build -f remote-desktop/jazzy-harmonic-rdp.dockerfile -t jazzy-harmonic-rdp .
+  docker run -it -p 3389:3389 jazzy-harmonic-rdp
+  # To connect
+  # Use RDP client to connect to localhost:3389 with USER/PASS (default: ioes/ioes)
+  ```
+
 ## Recommended : Running ARM64 Ubuntu with Lima
 Mac OS X is similar to a Linux environment, but after Apple's introduction of their proprietary Apple Silicon (M1 chip and later), it has a different CPU architecture compared to previous Intel-based computers (X86_64 architecture). This is similar to the ARM64 architecture used in Raspberry Pi and Android, which maximizes power efficiency.
 Lima is a package that is still actively being developed and provides a development environment very similar to Windows' WSL. Although it does not yet provide direct GUI operation using Wayland, this can be resolved through remote desktop access.

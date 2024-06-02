@@ -1,26 +1,28 @@
 # FOR APPLE SILICON (I.E. M1 MACBOOK) !!
 # FOR APPLE SILICON (I.E. M1 MACBOOK) !!
 # FOR APPLE SILICON (I.E. M1 MACBOOK) !!
-# ==================================== #
-# ========    ROS & GAZEBO    ======== #
-# ==================================== #
+# ============================================= #
+# ========    ROS & GAZEBO  with RDP   ======== #
+# ============================================= #
 # --------      Versions      -------- #
 # Ubuntu : 24.04
 # ROS : Jazzy
 # Gazebo : Harmonic
 # ------------------------------------ #
 # To Build
-# docker build -t jazzy-harmonic -f jazzy-harmonic-arm64.dockerfile .
+# docker build -t jazzy-harmonic-rdp -f jazzy-harmonic-rdp.dockerfile .
 # To Run
-# docker run --rm -it --privileged jazzy-harmonic
+# docker run -it -p 3389:3389 -p 22:22 jazzy-harmonic-rdp
+# To connect
+# connect using RDP at localhost:3389 with USER/PASS (efault: ioes/ioes)
 
 # Starting from ubuntu 24.04 with RDP support
 FROM arm64v8/ubuntu:24.04
 EXPOSE 3389/tcp
-EXPOSE 22/tcp
+# EXPOSE 22/tcp
 ARG USER=ioes
 ARG PASS=ioes
-ARG X11Forwarding=true
+ARG X11Forwarding=false
 
 # Set RDP and SSH environments
 # access with any RDP client at localhost:3389 with USER/PASS)

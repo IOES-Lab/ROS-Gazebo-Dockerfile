@@ -1,9 +1,9 @@
 FROM arm64v8/ubuntu:24.04
 EXPOSE 3389/tcp
-EXPOSE 22/tcp
+# EXPOSE 22/tcp
 ARG USER=ioes
 ARG PASS=ioes
-ARG X11Forwarding=true
+ARG X11Forwarding=false
 
 # Set RDP and SSH environments
 # access with any RDP client at localhost:3389 with USER/PASS)

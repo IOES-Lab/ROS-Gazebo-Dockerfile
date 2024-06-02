@@ -1,5 +1,12 @@
 # Dockerfiles for M1 Macbook
 
+## 추천 : ARM64 Ubuntu Docker와 원격 데스크탑 연결
+- remote-desktop : run and access using remote desktop client
+  ```bash
+  docker build -f remote-desktop/jazzy-harmonic-rdp.dockerfile -t jazzy-harmonic-rdp .
+  docker run -it -p 3389:3389 jazzy-harmonic-rdp
+  ```
+
 ## 추천 : ARM64 Ubuntu Lima 구동
 Mac OS X는 리눅스 환경과 유사하나 애플의 전용 애플 실리콘 (M1 칩 이후) 적용 이후 기존의 인텔 기반 컴퓨터들(X86_64 아키텍쳐)과 다른 CPU 아키텍쳐가 되었다. 이는 라즈베리 파이나 안드로이드와 유사한 ARM64 아키텍쳐을 이용하여 전력비를 극대화하는 방법에 해당한다.
 
@@ -52,7 +59,7 @@ sudo systemctl start xrdp
 - remote-desktop : run and access using remote desktop client
   ```bash
   docker build -f remote-desktop/jazzy-harmonic-rdp.dockerfile -t jazzy-harmonic-rdp .
-  docker run -it --rm --privileged -p 3389:3389 -p 22:22 -v ~/.Xauthority:/root/.Xauthority -e DISPLAY=docker.for.mac.host.internal:0 jazzy-harmonic-rdp /bin/bash
+  docker run -it --rm --privileged -p 3389:3389 jazzy-harmonic-rdp
   ```
 - novnc : view gui on browser (no direct copy and paste)
   ```
