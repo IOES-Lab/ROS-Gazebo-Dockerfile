@@ -83,33 +83,33 @@ RUN locale-gen en_US en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.
     export LANG=en_US.UTF-8
 
 
-# # Install ROS-Gazebo framework
-# ADD https://raw.githubusercontent.com/IOES-Lab/dave/$BRANCH/\
-# extras/ros-jazzy-gz-harmonic-install.sh install.sh
-# RUN bash install.sh
+# Install ROS-Gazebo framework
+ADD https://raw.githubusercontent.com/IOES-Lab/dave/$BRANCH/\
+extras/ros-jazzy-gz-harmonic-install.sh install.sh
+RUN bash install.sh
 
-# # Set up Dave workspace
-# ENV ROS_UNDERLAY /home/$USER/dave_ws/install
-# WORKDIR $ROS_UNDERLAY/../src
+# Set up Dave workspace
+ENV ROS_UNDERLAY /home/$USER/dave_ws/install
+WORKDIR $ROS_UNDERLAY/../src
 
-# ADD https://raw.githubusercontent.com/IOES-Lab/dave/$BRANCH/\
-# extras/repos/dave.$ROS_DISTRO.repos /home/$USER/ws_dave/dave.repos
-# RUN vcs import --shallow --input "/home/$USER/ws_dave/dave.repos"
+ADD https://raw.githubusercontent.com/IOES-Lab/dave/$BRANCH/\
+extras/repos/dave.$ROS_DISTRO.repos /home/$USER/ws_dave/dave.repos
+RUN vcs import --shallow --input "/home/$USER/ws_dave/dave.repos"
 
-# RUN rosdep init && \
-#   rosdep update --rosdistro $ROS_DISTRO
+RUN rosdep init && \
+  rosdep update --rosdistro $ROS_DISTRO
 
-# RUN apt-get update && rosdep update && \
-#     rosdep install -iy --from-paths . && \
-#     rm -rf /var/lib/apt/lists/
+RUN apt-get update && rosdep update && \
+    rosdep install -iy --from-paths . && \
+    rm -rf /var/lib/apt/lists/
 
-# WORKDIR $ROS_UNDERLAY/..
-# RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
-#     colcon build
+WORKDIR $ROS_UNDERLAY/..
+RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
+    colcon build
 
-# # source entrypoint setup
-# RUN touch /ros_entrypoint.sh && sed --in-place --expression \
-#     '$i source "$ROS_UNDERLAY/setup.bash"' /ros_entrypoint.sh
+# source entrypoint setup
+RUN touch /ros_entrypoint.sh && sed --in-place --expression \
+    '$i source "$ROS_UNDERLAY/setup.bash"' /ros_entrypoint.sh
 
 # Set User as user
 USER docker
@@ -119,3 +119,5 @@ RUN echo "chown docker:docker ~/HOST" >> ~/.bashrc
 
 # Use software rendering for container
 ENV LIBGL_ALWAYS_INDIRECT=1
+
+
