@@ -1,23 +1,22 @@
 FROM arm64v8/ubuntu:24.04
-EXPOSE 3389/tcp
-# EXPOSE 22/tcp
-ARG USER=ioes
-ARG PASS=ioes
-ARG X11Forwarding=false
-
 # Set RDP and SSH environments
 # access with any RDP client at localhost:3389 with USER/PASS)
 # SSh connect and forward X11 with USER/PASS at localhost:22
-
+ARG X11Forwarding=true
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-        apt-get install -y ubuntu-desktop-minimal=1.539 dbus-x11 xrdp sudo; \
+        apt-get install -y ubuntu-desktop-minimal dbus-x11 xrdp sudo; \
     [ $X11Forwarding = 'true' ] && apt-get install -y openssh-server; \
     apt-get autoremove --purge; \
     apt-get clean; \
     rm /run/reboot-required*
 
+# Down to here is at woensugchoi/ubuntu-arm-rdp-base
+
+ARG USER=docker
+ARG PASS=docker
+
 RUN useradd -s /bin/bash -m $USER -p $(openssl passwd "$PASS"); \
-    usermod -aG sudo $USER; \
+    usermod -aG sudo $USER; echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers; \
     adduser xrdp ssl-cert; \
     # Setting the required environment variables
     echo 'LANG=en_US.UTF-8' >> /etc/default/locale; \
@@ -36,12 +35,19 @@ RUN useradd -s /bin/bash -m $USER -p $(openssl passwd "$PASS"); \
         sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config || \
         :;
 
-CMD rm -f /var/run/xrdp/xrdp*.pid >/dev/null 2>&1; \
-    service dbus restart >/dev/null 2>&1; \
-    /usr/lib/systemd/systemd-logind >/dev/null 2>&1 & \
-    [ -f /usr/sbin/sshd ] && /usr/sbin/sshd; \
-    xrdp-sesman --config /etc/xrdp/sesman.ini; \
-    xrdp --nodaemon --config /etc/xrdp/xrdp.ini
+# Disable initial welcome window
+RUN echo "X-GNOME-Autostart-enabled=false" >> /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
 
+EXPOSE 3389/tcp
+EXPOSE 22/tcp
+CMD sudo rm -f /var/run/xrdp/xrdp*.pid >/dev/null 2>&1; \
+    sudo service dbus restart >/dev/null 2>&1; \
+    sudo /usr/lib/systemd/systemd-logind >/dev/null 2>&1 & \
+    [ -f /usr/sbin/sshd ] && sudo /usr/sbin/sshd; \
+    sudo xrdp-sesman --config /etc/xrdp/sesman.ini; \
+    sudo xrdp --nodaemon --config /etc/xrdp/xrdp.ini
+
+# Down to here is at woensugchoi/ubuntu-arm-rdp
 # docker build -t ubuntu-rdp -f ubuntu-rdp.dockerfile .
 # docker run -it -p 3389:3389 -p 22:22 ubuntu-rdp
+# Connect with RDP client (https://apps.apple.com/kr/app/microsoft-remote-desktop/id1295203466) to localhost
