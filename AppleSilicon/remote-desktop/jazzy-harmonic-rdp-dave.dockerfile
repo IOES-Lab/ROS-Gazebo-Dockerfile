@@ -35,24 +35,7 @@ RUN useradd -s /bin/bash -m $USER -p "$(openssl passwd "$PASS")"; \
 # Disable initial welcome window
 RUN echo "X-GNOME-Autostart-enabled=false" >> /etc/xdg/autostart/gnome-initial-setup-first-login.desktop
 
-# Run
-EXPOSE 3389/tcp
-EXPOSE 22/tcp
-# hadolint ignore=DL3025
-CMD sudo rm -f /var/run/xrdp/xrdp*.pid >/dev/null 2>&1; \
-    sudo service dbus restart >/dev/null 2>&1; \
-    sudo /usr/lib/systemd/systemd-logind >/dev/null 2>&1 & \
-    [ -f /usr/sbin/sshd ] && sudo /usr/sbin/sshd; \
-    sudo xrdp-sesman --config /etc/xrdp/sesman.ini; \
-    sudo xrdp --nodaemon --config /etc/xrdp/xrdp.ini
-
-
-# ROS-Gazebo arg
-ARG BRANCH="ros2"
-ARG ROS_DISTRO="jazzy"
-
 # Install basics
-USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 # hadolint ignore=DL3008
@@ -70,18 +53,33 @@ RUN apt-get update && \
 
 # Locale for UTF-8
 RUN truncate -s0 /tmp/preseed.cfg && \
-   (echo "tzdata tzdata/Areas select Etc" >> /tmp/preseed.cfg) && \
-   (echo "tzdata tzdata/Zones/Etc select UTC" >> /tmp/preseed.cfg) && \
-   debconf-set-selections /tmp/preseed.cfg && \
-   rm -f /etc/timezone && \
-   dpkg-reconfigure -f noninteractive tzdata
+    (echo "tzdata tzdata/Areas select Etc" >> /tmp/preseed.cfg) && \
+    (echo "tzdata tzdata/Zones/Etc select UTC" >> /tmp/preseed.cfg) && \
+    debconf-set-selections /tmp/preseed.cfg && \
+    rm -f /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata
 # hadolint ignore=DL3008
 RUN apt-get update && \
     apt-get -y install --no-install-recommends locales tzdata \
     && rm -rf /tmp/*
 RUN locale-gen en_US en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
     export LANG=en_US.UTF-8
+    
+# Run
+EXPOSE 3389/tcp
+EXPOSE 22/tcp
+# hadolint ignore=DL3025
+CMD sudo rm -f /var/run/xrdp/xrdp*.pid >/dev/null 2>&1; \
+    sudo service dbus restart >/dev/null 2>&1; \
+    sudo /usr/lib/systemd/systemd-logind >/dev/null 2>&1 & \
+    [ -f /usr/sbin/sshd ] && sudo /usr/sbin/sshd; \
+    sudo xrdp-sesman --config /etc/xrdp/sesman.ini; \
+    sudo xrdp --nodaemon --config /etc/xrdp/xrdp.ini
 
+
+# ROS-Gazebo arg
+ARG BRANCH="ros2"
+ARG ROS_DISTRO="jazzy"
 
 # Install ROS-Gazebo framework
 ADD https://raw.githubusercontent.com/IOES-Lab/dave/$BRANCH/\
@@ -113,9 +111,8 @@ RUN touch /ros_entrypoint.sh && sed --in-place --expression \
 
 # Set User as user
 USER docker
-
-# Set volume previleage for HOST home directory
-RUN echo "chown docker:docker ~/HOST" >> ~/.bashrc
+RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
+    echo "chown docker:docker ~/HOST" >> ~/.bashrc
 
 # Use software rendering for container
 ENV LIBGL_ALWAYS_INDIRECT=1
