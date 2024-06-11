@@ -112,7 +112,7 @@ RUN apt-get update && \
     python3-pil.imagetk:arm64 python3-dev python3-colcon-cd \
     python3-pybind11 python3-pyside2.qtsvg python3-sip-dev \
     python3-opencv:arm64 python3-fonttools python3-ufolib2 python3-matplotlib \
-    python3-docutils python3-catkin-pkg python3-colcon-ros \
+    python3-docutils \
     && rm -rf /tmp/*
 
 # Down to here is at woensugchoi/ubuntu-arm-rdp

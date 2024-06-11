@@ -99,8 +99,8 @@ RUN vcs import --shallow --input "/home/$USER/ws_dave/dave.repos"
 RUN rosdep init && \
   rosdep update --rosdistro $ROS_DISTRO
 
-RUN apt-get update && rosdep update && \
-    rosdep install -iy --from-paths . && \
+RUN apt-get update && apt --fix-broken install && \
+    rosdep update &&  rosdep install -iy --from-paths . && \
     rm -rf /var/lib/apt/lists/
 
 WORKDIR $ROS_UNDERLAY/..
