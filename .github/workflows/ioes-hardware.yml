@@ -43,10 +43,14 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
+      - name: Set working directory
+        run: cd ./docker-compose
+        shell: bash
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./docker-compose
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
