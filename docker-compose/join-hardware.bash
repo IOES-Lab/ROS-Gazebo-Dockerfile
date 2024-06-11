@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMG="ioes-jazzy"
+IMG="ioes-hardware"
 CONTAINER_ID=""
 
 while [[ $# -gt 0 ]]
