@@ -1,5 +1,5 @@
 ---
-name: Publish a Docker image (ARM64; Apple Silicon)
+name: IOES-Hardware - Publish a Docker image (ARM64; Apple Silicon)
 
 # yamllint disable-line rule:truthy
 on:
@@ -52,6 +52,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: docker-compose/ioes-hardware.dockerfile
           platforms: linux/arm64/v8
+          no-cache: true
           build-args: |
             ROS_DISTRO=${{ env.ROS_DISTRO }}
             BRANCH=${{ env.BRANCH }}

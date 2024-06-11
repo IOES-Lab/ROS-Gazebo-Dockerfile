@@ -24,6 +24,9 @@ RUN apt-get update && apt-get install -y \
       ros-humble-demo-nodes-py && \
     rm -rf /var/lib/apt/lists/*
 
+# Ardupilot installation
+
+
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
 RUN chmod +x /ros_entrypoint.sh
