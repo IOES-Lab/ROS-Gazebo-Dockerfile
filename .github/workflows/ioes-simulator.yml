@@ -46,13 +46,12 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: docker-compose
+          context: ./docker-compose
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ioes-simulator.dockerfile
           platforms: linux/arm64/v8
-          no-cache: true
           build-args: |
             ROS_DISTRO=${{ env.ROS_DISTRO }}
             BRANCH=${{ env.BRANCH }}
